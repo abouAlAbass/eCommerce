@@ -1,0 +1,8 @@
+﻿/API/bin/Debug/net5.0
+/API/obj
+/Core/bin/Debug/net5.0
+/Core/obj
+/Infrastructure/bin/Debug/net5.0
+/Infrastructure/obj
+/API/appsettings.json
+/API/ecommerce.db
