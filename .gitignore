@@ -6,3 +6,5 @@
 /Infrastructure/obj
 /API/appsettings.json
 /API/ecommerce.db
+/.vs/EcommerceApp/DesignTimeBuild
+/.vs
