@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using System.Linq;
 
 namespace API
@@ -34,13 +35,19 @@ namespace API
      
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
+            services.AddSwaggerDocumentation();
+
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var configuration = ConfigurationOptions.Parse(_configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
             services.AddDbContext<StoreContext>(options => 
                 options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")
                 ));
-
+           
             services.AddApplicationServices();
-
-            services.AddSwaggerDocumentation();
+         
             services.AddCors(options => 
             options.AddPolicy("CorsPolicy",policy => {
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");

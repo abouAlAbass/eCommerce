@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from './shared/models/product';
 import { IPagination } from './shared/models/pagination';
+import { BasketService } from './basket/basket.service';
 
 
 @Component({
@@ -12,11 +13,21 @@ import { IPagination } from './shared/models/pagination';
 export class AppComponent implements OnInit {
   title = 'Ecommerce';
  
-  constructor(){
+  constructor(private basketService:BasketService){
 
   }
   ngOnInit(): void {
- 
-  }
+    const basketId = localStorage.getItem('basket_id');
+    if(basketId){
+      this.basketService.getBasket(basketId).subscribe(() => {
+        console.log("initlized basket")
+      },error => {
+        console.error(error);
+        
+      });
+    }else{
+      console.log("not intilized");
+    }
+    }
   
 }
