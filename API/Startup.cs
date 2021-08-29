@@ -5,6 +5,7 @@ using API.Helpers;
 using API.Middleware;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -45,8 +46,12 @@ namespace API
             services.AddDbContext<StoreContext>(options => 
                 options.UseSqlite(_configuration.GetConnectionString("DefaultConnection")
                 ));
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlite(_configuration.GetConnectionString("IdentityConnection"))
+            );
            
             services.AddApplicationServices();
+            services.AddIdentityServices(_configuration);
          
             services.AddCors(options => 
             options.AddPolicy("CorsPolicy",policy => {
@@ -70,6 +75,7 @@ namespace API
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors("CorsPolicy");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

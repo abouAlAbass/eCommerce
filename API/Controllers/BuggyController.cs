@@ -1,10 +1,8 @@
 ﻿using API.Errors;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace API.Controllers
 {
@@ -16,8 +14,9 @@ namespace API.Controllers
         {
             _contex = contex;
         }
-      [HttpGet("notfound")]
-      public ActionResult GetNotFoundRequest()
+
+        [HttpGet("notfound")]
+        public ActionResult GetNotFoundRequest()
         {
             var thing = _contex.Products.Find(62);
             if (thing == null)
@@ -26,21 +25,29 @@ namespace API.Controllers
             }
             return Ok();
         }
+
         [HttpGet("servererror")]
-      public ActionResult GetServerErrorRequest()
-      {
+        public ActionResult GetServerErrorRequest()
+        {
             var thing = _contex.Products.Find(62);
             var thingToReturn = thing.ToString();
             return Ok();
-      }  
+        }
         [HttpGet("badrequest")]
-      public ActionResult GetBadRequestRequest()
+        public ActionResult GetBadRequestRequest()
         {
-            
+
             return BadRequest(new ApiResponse(400));
-        }  
+        }
+
         [HttpGet("badrequest/{id}")]
-      public ActionResult GetNotFoundRequest(int id)
+        public ActionResult GetNotFoundRequest(int id)
+        {
+            return Ok();
+        }
+        [HttpGet("testauth")]
+        [Authorize]
+        public ActionResult TestAuth()
         {
             return Ok();
         }
